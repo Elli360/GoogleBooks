@@ -7,6 +7,28 @@ import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
 
+class Books extends Component {
+  state = {
+    books:[],
+    search: ""
+  };
+SearchBooks =query => {
+  API.searchGooglebooks(query)
+  .then(res => this.setState(
+    {
+      books:res.data.items,
+      search: ""
+    },
+    handleInputChange = event =>{
+      const value = event.target.value;
+      const name =event.target.name;
+      this.setState({
+        [name]: value
+      });
+    }
+  ))
+}
+}
 function Books() {
   // Setting our component's initial state
   const [books, setBooks] = useState([])
