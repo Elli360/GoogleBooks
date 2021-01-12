@@ -1,11 +1,12 @@
 import React, { Component, useEffect, useState } from "react";
 import Jumbotron from "../components/Jumbotron";
+import Container from "../components/Container"
 import DeleteBtn from "../components/DeleteBtn";
 import API from "../utils/Api";
 import SearchForm from "../components/SearchForm";
-import { Col, Row, Container } from "../components/Grid";
+import { Col, Row } from "../components/Grid";
 import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
+
 
 class Books extends Component {
   state = {
@@ -25,11 +26,20 @@ SearchBooks =query => {
       this.setState({
         [name]: value
       });
-    }
+    handleFormSubmit = event =>{
+      event.preventDefault();
+      this.searchBooks(this.state.search);
+    };
+
+  //  deleteBook = id =>{
+  //   API.deleteBook(id)
+  //   .then(res => )
+
+   }
   ))
 }
 }
-function Books() {
+function books() {
   // Setting our component's initial state
   const [books, setBooks] = useState([])
   const [formObject, setFormObject] = useState({})
@@ -47,9 +57,7 @@ function Books() {
       )
       .catch(err => console.log(err));
   };
-
-
-    return (
+return ( 
       <Container fluid>
         <Row>
           <Col size="md-6">
@@ -107,6 +115,4 @@ function Books() {
       </Container>
     );
   }
-
-
 export default Books;
