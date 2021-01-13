@@ -12,19 +12,9 @@ import { List, ListItem } from "../components/List";
 class Books extends Component {
   state = {
     books:[],
-    search: ""
+    query:"",
+    message:"Search for a book"
   };
-
-  SearchBooks =query => {
-    API.searchGooglebooks(query).then(res =>{
-      console.log(res)
-      this.setState(
-      {
-        books:res.data.items,
-        search: ""
-      })
-    } 
-  )}
 
   handleInputChange = event =>{
     console.log (event.target.value)
@@ -34,10 +24,24 @@ class Books extends Component {
       [name]: value
     });
   }
-
+  SearchBooks = () => {
+    API.searchGooglebooks(this.state.query)
+    .then(res => 
+    this.setState(
+      {
+        books:res.data
+      })
+    )
+    .catch(() =>
+    this.setState({
+      books: [],
+      message:"No books found"
+    })
+  );
+};
     handleFormSubmit = event =>{
       event.preventDefault();
-      this.SearchBooks(this.state.search);
+      this.SearchBooks();
     };
 
   // Loads all books and sets them to books
