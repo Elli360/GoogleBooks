@@ -1,10 +1,11 @@
 import React, { Component, useEffect, useState } from "react";
 import Jumbotron from "../components/Jumbotron";
-import Container from "../components/Container"
+import Container from "../components/Container";
 import DeleteBtn from "../components/DeleteBtn";
+import Col from "../components/Col";
 import API from "../utils/Api";
 import SearchForm from "../components/SearchForm";
-import { Col, Row } from "../components/Grid";
+import Row from "../components/Row";
 import { List, ListItem } from "../components/List";
 
 
@@ -13,50 +14,41 @@ class Books extends Component {
     books:[],
     search: ""
   };
-SearchBooks =query => {
-  API.searchGooglebooks(query)
-  .then(res => this.setState(
-    {
-      books:res.data.items,
-      search: ""
-    },
-    handleInputChange = event =>{
-      const value = event.target.value;
-      const name =event.target.name;
-      this.setState({
-        [name]: value
-      });
+
+  SearchBooks =query => {
+    API.searchGooglebooks(query).then(res =>{
+      console.log(res)
+      this.setState(
+      {
+        books:res.data.items,
+        search: ""
+      })
+    } 
+  )}
+
+  handleInputChange = event =>{
+    console.log (event.target.value)
+    const value = event.target.value;
+    const name =event.target.name;
+    this.setState({
+      [name]: value
+    });
+  }
+
     handleFormSubmit = event =>{
       event.preventDefault();
-      this.searchBooks(this.state.search);
+      this.SearchBooks(this.state.search);
     };
 
-  //  deleteBook = id =>{
-  //   API.deleteBook(id)
-  //   .then(res => )
-
-   }
-  ))
-}
-}
-function books() {
-  // Setting our component's initial state
-  const [books, setBooks] = useState([])
-  const [formObject, setFormObject] = useState({})
-
-  // Load all books and store them with setBooks
-  useEffect(() => {
-    loadBooks()
-  }, [])
-
   // Loads all books and sets them to books
-  function loadBooks() {
+  loadBooks = () => {
     API.getBooks()
       .then(res => 
-        setBooks(res.data)
+        this.setState({books: res.data})
       )
       .catch(err => console.log(err));
   };
+render () {
 return ( 
       <Container fluid>
         <Row>
@@ -65,36 +57,25 @@ return (
               <h1>What Books Should I Read?</h1>
             </Jumbotron>
             <form>
-              <Input
-                onChange={() => {}}
-                name="title"
+              <input
+                onChange={this.handleInputChange}
+                name="search"
                 placeholder="Title (required)"
               />
-              <Input
-                onChange={() => {}}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <TextArea
-                onChange={() => {}}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
-              <FormBtn
-                disabled={!(formObject.author && formObject.title)}
-                onClick={() => {}}
+              <button
+                onClick={(event) => this.handleFormSubmit(event)}
               >
                 Submit Book
-              </FormBtn>
+              </button>
             </form>
           </Col>
           <Col size="md-6 sm-12">
             <Jumbotron>
               <h1>Books On My List</h1>
             </Jumbotron>
-            {books.length ? (
+            {this.state.books.length ? (
               <List>
-                {books.map(book => {
+                {this.state.books.map(book => {
                   return (
                     <ListItem key={book._id}>
                       <a href={"/books/" + book._id}>
@@ -115,4 +96,5 @@ return (
       </Container>
     );
   }
+}
 export default Books;
